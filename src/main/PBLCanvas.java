@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.nio.FloatBuffer;
+import java.util.TimerTask;
 
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
@@ -34,6 +35,14 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		addGLEventListener(this);
 
 		particleSystem = new ParticleSystem();
+
+		java.util.Timer timer = new java.util.Timer(true);
+		TimerTask task = new TimerTask() {
+			public void run() {
+				update();			
+			}
+		};
+		timer.schedule(task, 0, 50);   
 	}
 
 	private static GLCapabilities createGLCapabilities() {
@@ -56,8 +65,8 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
 		gl.glClearDepth(1.0f); // Depth Buffer Setup
 		gl.glEnable(GL.GL_DEPTH_TEST); // Enables Depth Testing
-		gl.glDepthFunc(GL.GL_LEQUAL); // The Type Of Depth Test To Do
-		gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST); // Really
+	//	gl.glDepthFunc(GL.GL_LEQUAL); // The Type Of Depth Test To Do
+		gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_FASTEST); // Really
 																	// Nice
 																	// Perspective
 																	// Calculations
@@ -79,26 +88,25 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 
-		gl.glClearColor(0, 0, 0, 0);
-		gl.glShadeModel(GL.GL_SMOOTH);
+	}
 
-
-		gl.glEnable(GL.GL_DEPTH_TEST);
+	public void update() {
+		particleSystem.Update();
+		System.out.println("start display");
+		display();
+		System.out.println("end display");
 	}
 
 	public void display(GLAutoDrawable drawable) {
 		drawable.setGL(new DebugGL(drawable.getGL()));
 		final GL gl = drawable.getGL();
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // Clear
-																		// The
-																		// Screen
-																		// And
-																		// The
-																		// Depth
-																		// Buffer
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-
+		System.out.println("start draw");
 		particleSystem.Draw(gl, glu, glut);
+		System.out.println("end draw");
+		gl.glFlush();
+		
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,

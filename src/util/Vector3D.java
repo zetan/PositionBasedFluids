@@ -39,7 +39,8 @@ public class Vector3D {
 		float length = x * x + y * y + z * z;
 		return (float) Math.sqrt(length);
 	}
-
+	
+	/* static method, return a new one */
 	public static Vector3D Normalize(Vector3D vec){
 		float length = vec.Length();
 		if(length != 0){
@@ -48,6 +49,7 @@ public class Vector3D {
 			return vec;
 		}
 	}
+	
 	public static Vector3D Multiply(Vector3D vec, float coe) {
 		return new Vector3D(vec.x * coe, vec.y * coe, vec.z * coe);
 	}
@@ -64,7 +66,27 @@ public class Vector3D {
 		float product = a.x * b.x + a.y * b.y + a.z * b.z;
 		return product;
 	}
-
+	public static Vector3D Scale(Vector3D vec, float scale){
+		return new Vector3D(vec.x * scale, vec.y * scale, vec.z * scale);
+	}
+	
+	/* non-static method, modify itself, more time-saving */
+	public void Add(Vector3D vec){
+		this.x += vec.x;
+		this.y += vec.y;
+		this.z += vec.z;
+	}
+	public void Substract(Vector3D vec){
+		this.x -= vec.x;
+		this.y -= vec.y;
+		this.z -= vec.z;
+	}
+	public void Scale(float scale){
+		this.x *= scale;
+		this.y *= scale;
+		this.z *= scale;
+	}
+	
 	public static Vector3D CrossProduct(Vector3D a, Vector3D b){
 		float x = a.y * b.z - a.z * b.y;
 		float y = a.z * b.x - a.x * b.z;
@@ -83,10 +105,13 @@ public class Vector3D {
 		}
 	}
 
-	public static Vector3D Scale(Vector3D vec, float scale){
-		return new Vector3D(vec.x * scale, vec.y * scale, vec.z * scale);
-	}
 	
+	
+	public void set(float x, float y, float z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 	
 	public float getX() {
 		return x;

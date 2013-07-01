@@ -11,6 +11,9 @@ import util.Vector3D;
 
 public class Particle {
 	private Vector3D pos;
+	private Vector3D posStar; // a temp pos before applying constaints
+	private Vector3D velocity;
+	private Vector3D force;
 	private float mass;
 	
 	public Particle(){}
@@ -18,15 +21,17 @@ public class Particle {
 	public Particle(Vector3D pos, float mass) {
 		this.pos = pos;
 		this.mass = mass;
+		velocity = new Vector3D(0,0,0);
+		force = new Vector3D(0,0,0);
+		posStar = new Vector3D(0,0,0);
 	}
 
 	public void Draw(GL gl, GLU glu, GLUT glut){
-		gl.glPushMatrix();
+	//	gl.glPushMatrix();
 		gl.glTranslatef(pos.x, pos.y, pos.z);
-	
-		glut.glutSolidSphere(1, 6, 16);
-		//glTranslatef(-pos.x, -pos.y, -pos.z);
-		gl.glPopMatrix();
+		glut.glutSolidSphere(1, 3, 3);
+		gl.glTranslatef(-pos.x, -pos.y, -pos.z);
+	//	gl.glPopMatrix();
 	}
 	
 	
@@ -45,6 +50,31 @@ public class Particle {
 
 	public void setMass(float mass) {
 		this.mass = mass;
+	}
+
+
+	public Vector3D getPosStar() {
+		return posStar;
+	}
+
+	public void setPosStar(Vector3D posStar) {
+		this.posStar = posStar;
+	}
+
+	public Vector3D getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector3D velocity) {
+		this.velocity = velocity;
+	}
+
+	public Vector3D getForce() {
+		return force;
+	}
+
+	public void setForce(Vector3D force) {
+		this.force = force;
 	}
 	
 	

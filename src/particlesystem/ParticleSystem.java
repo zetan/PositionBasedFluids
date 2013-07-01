@@ -6,13 +6,18 @@ import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import pbf.Force;
+import pbf.Gravity;
+import pbf.PBF;
+
 import sun.security.krb5.KdcComm;
 import util.Vector3D;
 
 import com.sun.opengl.util.GLUT;
 
 public class ParticleSystem {
-	List<Particle> particles = new ArrayList<>();
+	List<Particle> particles = new ArrayList<Particle>();
+	PBF pbf = new PBF();
 
 	public ParticleSystem() {
 		// TODO Auto-generated constructor stub
@@ -23,8 +28,22 @@ public class ParticleSystem {
 				}
 					
 		
+		
+	}
+	
+	public void Update(){
+		pbf.UpdateFluid(this);
 	}
 
+	public void ApplyExternelForce(){
+		//clear force
+		for(Particle particle: particles){
+			particle.getForce().set(0, 0, 0);
+		}
+		Gravity.ApplyForce(particles);
+	}
+	
+	
 	public void Draw(GL gl, GLU glu, GLUT glut) {
 		//particle mat, init once
 		float mat_ambient[] = { 0.7f, 0.7f, 0.7f, 1.0f };
@@ -35,7 +54,24 @@ public class ParticleSystem {
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
-	    
-	    for(Particle particle: particles) particle.Draw(gl, glu, glut);
+	    System.out.println("start draw particle");
+	    int i = 0;
+	    for(Particle particle: particles) {
+	    	if(i %100 == 0) System.out.println("draw " + (i*100) + " particles");
+	    	particle.Draw(gl, glu, glut);
+	    	i++;
+	    }
+	    System.out.println("end draw particle");
 	}
+
+
+
+	public List<Particle> getParticles() {
+		return particles;
+	}
+
+	public void setParticles(List<Particle> particles) {
+		this.particles = particles;
+	}
+	
 }
