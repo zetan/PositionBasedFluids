@@ -9,7 +9,7 @@ public class ODESolver {
 	//apply euler ode solver to particle system, 
 	//and save the newest pos in posStar
 	public static void EulerToStar(List<Particle> particles){
-		float t = 0.2f;
+		float t = 0.05f;
 		for(Particle particle : particles){
 			particle.getVelocity().Add(Vector3D.Scale(particle.getForce(), t));
 			particle.setPosStar(Vector3D.Add(particle.getPos(), Vector3D.Scale(particle.getVelocity(), t)));

@@ -2,6 +2,7 @@ package particlesystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -19,11 +20,12 @@ public class ParticleSystem {
 	List<Particle> particles = new ArrayList<Particle>();
 	PBF pbf = new PBF();
 
+	Random random = new Random();
 	public ParticleSystem() {
 		// TODO Auto-generated constructor stub
-		for(int i = -20; i < 20; i+=2)
-			for(int j = -5; j < 5; j++)
-				for(int k = -5; k < 5; k++){
+		for(int i = -20; i <= 20; i+=2)
+			for(int j = -5; j <= 5; j++)
+				for(int k = -2; k <= 2; k++){
 					particles.add(new Particle(new Vector3D(i, j, k), 1));
 				}
 					
@@ -55,12 +57,11 @@ public class ParticleSystem {
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
 	    System.out.println("start draw particle");
-	    int i = 0;
 	    for(Particle particle: particles) {
-	    	if(i %100 == 0) System.out.println("draw " + (i*100) + " particles");
-	    	particle.Draw(gl, glu, glut);
-	    	i++;
+	    	//if(random.nextDouble() > 0.8)
+	    		particle.Draw(gl, glu, glut);
 	    }
+	   // particles.get(0).Draw(gl, glu, glut);
 	    System.out.println("end draw particle");
 	}
 

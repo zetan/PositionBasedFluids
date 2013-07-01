@@ -51,6 +51,7 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		capabilities.setBlueBits(8);
 		capabilities.setGreenBits(8);
 		capabilities.setAlphaBits(8);
+		capabilities.setDoubleBuffered(true);
 		return capabilities;
 	}
 
@@ -65,7 +66,7 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
 		gl.glClearDepth(1.0f); // Depth Buffer Setup
 		gl.glEnable(GL.GL_DEPTH_TEST); // Enables Depth Testing
-	//	gl.glDepthFunc(GL.GL_LEQUAL); // The Type Of Depth Test To Do
+		gl.glDepthFunc(GL.GL_LESS); // The Type Of Depth Test To Do
 		gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_FASTEST); // Really
 																	// Nice
 																	// Perspective
@@ -77,8 +78,6 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		float position[] = { 0.0f, 3.0f, 2.0f, 0.0f };
 		float lmodel_ambient[] = { 0.4f, 0.4f, 0.4f, 1.0f };
 
-		gl.glEnable(GL.GL_DEPTH_TEST);
-		gl.glDepthFunc(GL.GL_LESS);
 
 		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
 		gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, diffuse, 0);
@@ -98,13 +97,14 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 	}
 
 	public void display(GLAutoDrawable drawable) {
-		drawable.setGL(new DebugGL(drawable.getGL()));
+		//drawable.setGL(new DebugGL(drawable.getGL()));
 		final GL gl = drawable.getGL();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		System.out.println("start draw");
 		particleSystem.Draw(gl, glu, glut);
 		System.out.println("end draw");
+	//	drawable.swapBuffers();
 		gl.glFlush();
 		
 	}
@@ -118,8 +118,8 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		gl.glMatrixMode(GL.GL_PROJECTION);
 		gl.glLoadIdentity();
 		// glu.gluOrtho2D(0.0, (double) width, 0.0, (double) height);
-		glu.gluPerspective(140.0f, ((float) width) / height, 0.1f, 100.0f);
-		glu.gluLookAt(0.0, 20.0, 20.0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+		glu.gluPerspective(100.0f, ((float) width) / height, 0.1f, 100.0f);
+		glu.gluLookAt(0.0, 0.0, 20.0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
