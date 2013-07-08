@@ -13,8 +13,11 @@ public class PBF {
 		particleSystem.ApplyExternelForce();
 		ODESolver.EulerToStar(particleSystem.getParticles());
 		//find neighbours
+		particleSystem.FitIntoCells();
 		// make it align with constraints
-		for(int i = 0; i < 1; i++){}
+		for(int i = 0; i < 1; i++){
+			particleSystem.CollisionWithBox();
+		}
 		
 		//v = (posStar-pos) / t
 		for(Particle particle : particleSystem.getParticles())
@@ -27,4 +30,14 @@ public class PBF {
 		}
 	}
 	
+	
+	public void ComputeLamda(ParticleSystem particleSystem){
+		for(Particle particle: particleSystem.getParticles()){
+			ComputeLamda(particle);
+		}
+	}
+	
+	public void ComputeLamda(Particle particle){
+		
+	}
 }

@@ -15,6 +15,8 @@ public class Particle {
 	private Vector3D velocity;
 	private Vector3D force;
 	private float mass;
+	private Cell cell;
+	private float lamda;
 	
 	public Particle(){}
 
@@ -35,6 +37,16 @@ public class Particle {
 	}
 	
 	
+	
+	
+	
+	public float getLamda() {
+		return lamda;
+	}
+
+	public void setLamda(float lamda) {
+		this.lamda = lamda;
+	}
 
 	public Vector3D getPos() {
 		return pos;
@@ -75,6 +87,14 @@ public class Particle {
 
 	public void setForce(Vector3D force) {
 		this.force = force;
+	}
+
+	public Cell getCell() {
+		return cell;
+	}
+
+	public void setCell(Cell cell) {
+		this.cell = cell;
 	}
 	
 	

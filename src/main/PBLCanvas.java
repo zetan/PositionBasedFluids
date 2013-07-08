@@ -91,9 +91,7 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 
 	public void update() {
 		particleSystem.Update();
-		System.out.println("start display");
 		display();
-		System.out.println("end display");
 	}
 
 	public void display(GLAutoDrawable drawable) {
@@ -119,7 +117,7 @@ public class PBLCanvas extends GLCanvas implements GLEventListener {
 		gl.glLoadIdentity();
 		// glu.gluOrtho2D(0.0, (double) width, 0.0, (double) height);
 		glu.gluPerspective(100.0f, ((float) width) / height, 0.1f, 100.0f);
-		glu.gluLookAt(0.0, 0.0, 20.0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+		glu.gluLookAt(50.0, 20.0, 50.0, 40.0, 20.0, -100.0, 0.0, 1.0, 0.0);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
 

@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import pbf.Box;
 import pbf.Force;
 import pbf.Gravity;
 import pbf.PBF;
@@ -15,21 +16,27 @@ import sun.security.krb5.KdcComm;
 import util.Vector3D;
 
 import com.sun.opengl.util.GLUT;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class ParticleSystem {
 	List<Particle> particles = new ArrayList<Particle>();
 	PBF pbf = new PBF();
+	Box box = new Box(0, 80, 0, 100, 0, 20);
+	CellCube cellCube;
+	
 
 	Random random = new Random();
 	public ParticleSystem() {
 		// TODO Auto-generated constructor stub
-		for(int i = -20; i <= 20; i+=2)
-			for(int j = -5; j <= 5; j++)
-				for(int k = -2; k <= 2; k++){
+		for(int i = 35; i <= 45; i+=2)
+			for(int j = 5; j <= 50; j++)
+				for(int k = 2; k <= 6; k++){
 					particles.add(new Particle(new Vector3D(i, j, k), 1));
 				}
 					
 		
+		//particles.add(new Particle(new Vector3D(40, 1, 3), 1));
+		cellCube = new CellCube(box.getWidth(), box.getHeight(), box.getDepth());
 		
 	}
 	
@@ -45,6 +52,13 @@ public class ParticleSystem {
 		Gravity.ApplyForce(particles);
 	}
 	
+	public void CollisionWithBox(){
+		for(Particle particle:particles){
+			if(box.isInBox(particle.getPosStar()) == false) {
+				box.ForceInsideBox(particle.getPosStar());
+			}
+		}
+	}
 	
 	public void Draw(GL gl, GLU glu, GLUT glut) {
 		//particle mat, init once
@@ -52,20 +66,23 @@ public class ParticleSystem {
 		float mat_diffuse[] = { 0.4f, 0.4f, 1.0f, 1.0f};
 		float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float mat_shininess[] = {50.0f};
-	    gl.glTranslatef(-3.75f, 0.0f, 0.0f);
+	   // gl.glTranslatef(-3.75f, 0.0f, 0.0f);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, mat_ambient, 0);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse, 0);
 	    gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
-	    System.out.println("start draw particle");
 	    for(Particle particle: particles) {
 	    	//if(random.nextDouble() > 0.8)
 	    		particle.Draw(gl, glu, glut);
 	    }
 	   // particles.get(0).Draw(gl, glu, glut);
-	    System.out.println("end draw particle");
+	    box.Draw(gl, glu, glut);
 	}
 
-
+	public void FitIntoCells(){
+		cellCube.FitIntoCells(particles, box);
+	}
+	
+	
 
 	public List<Particle> getParticles() {
 		return particles;
