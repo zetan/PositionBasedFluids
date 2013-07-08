@@ -13,7 +13,7 @@ public class PBF {
 	
 	public static final float H = 3;
 	public static final float KPOLY = (float) (315 / (64.0 * Math.PI * Math.pow(H, 9)));
-	public static final float REST_DENSITY = 0.33f;
+	public static final float REST_DENSITY = 0.26f;
 
 	public PBF(){}
 	
@@ -29,8 +29,12 @@ public class PBF {
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeC(particle);
 				ComputeLamda(particle);
+				ComputeDeltaPos(particle);
 			}
 			particleSystem.CollisionWithBox();
+			for(Particle particle:particleSystem.getParticles()){
+				particle.getPosStar().Add(particle.getDeltaPos());
+			}
 		}
 		
 		//v = (posStar-pos) / t
@@ -54,7 +58,7 @@ public class PBF {
 		}
 		particle.setDensity(density);
 		particle.setConstraint(density / REST_DENSITY -1);
-	//	System.out.println("density = " + density);
+		System.out.println("density = " + density);
 	}
 	
 	
@@ -82,8 +86,8 @@ public class PBF {
 		Vector3D dist = Vector3D.Substract(pi, pj);
 		float r = dist.Length();
 		float a = (float) Math.pow(H*H - r*r, 2);
-		Vector3D vec = new Vector3D(H*H - 2 * dist.x, H*H - 2 * dist.y, H*H - 2 * dist.z);
-		vec.Scale(KPOLY * a);
+		Vector3D vec = new Vector3D(- 2 * dist.x, - 2 * dist.y, - 2 * dist.z);
+		vec.Scale(KPOLY *3* a);
 		return vec;
 	}
 	public float Kernel(Vector3D pi, Vector3D pj){
@@ -98,6 +102,18 @@ public class PBF {
 			Vector3D grad = ComputeGrandientC(particle, neighbour);
 			sumGradient += grad.LengthSquare();
 		}
-		particle.setLamda(particle.getConstraint() / sumGradient * -1);
+		particle.setLamda(particle.getConstraint() / (sumGradient + 5f) * -1);
+	}
+	
+	public void ComputeDeltaPos(Particle particle){
+		List<Particle> neighbours = particle.getNeighbours();
+		Vector3D delta = new Vector3D(0,0,0);
+		for(Particle neigh:neighbours){
+			Vector3D gradient = KernelGradient(particle.getPosStar(), neigh.getPosStar());
+			gradient.Scale(particle.getLamda() + neigh.getLamda());
+			delta.Add(gradient);
+		}
+		delta.Scale(1/REST_DENSITY);
+		particle.setDeltaPos(delta);
 	}
 }
