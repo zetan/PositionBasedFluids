@@ -1,6 +1,8 @@
 package particlesystem;
 
 
+import java.util.List;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUtessellator;
@@ -12,11 +14,15 @@ import util.Vector3D;
 public class Particle {
 	private Vector3D pos;
 	private Vector3D posStar; // a temp pos before applying constaints
+	private Vector3D deltaPos;
 	private Vector3D velocity;
 	private Vector3D force;
 	private float mass;
 	private Cell cell;
 	private float lamda;
+	private float density;
+	private float constraint;
+	private List<Particle> neighbours;
 	
 	public Particle(){}
 
@@ -40,6 +46,30 @@ public class Particle {
 	
 	
 	
+	public float getConstraint() {
+		return constraint;
+	}
+
+	public void setConstraint(float constraint) {
+		this.constraint = constraint;
+	}
+
+	public float getDensity() {
+		return density;
+	}
+
+	public void setDensity(float density) {
+		this.density = density;
+	}
+
+	public List<Particle> getNeighbours() {
+		return neighbours;
+	}
+
+	public void setNeighbours(List<Particle> neighbours) {
+		this.neighbours = neighbours;
+	}
+
 	public float getLamda() {
 		return lamda;
 	}
@@ -54,6 +84,14 @@ public class Particle {
 
 	public void setPos(Vector3D pos) {
 		this.pos = pos;
+	}
+
+	public Vector3D getDeltaPos() {
+		return deltaPos;
+	}
+
+	public void setDeltaPos(Vector3D deltaPos) {
+		this.deltaPos = deltaPos;
 	}
 
 	public float getMass() {

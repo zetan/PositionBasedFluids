@@ -29,6 +29,14 @@ public class Cell {
 	public void setNeighbours(List<Cell> neighbours) {
 		this.neighbours = neighbours;
 	}
+
+	public List<Particle> getParticles() {
+		return particles;
+	}
+
+	public void setParticles(List<Particle> particles) {
+		this.particles = particles;
+	}
 	
 	
 }

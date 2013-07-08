@@ -40,6 +40,10 @@ public class Vector3D {
 		return (float) Math.sqrt(length);
 	}
 	
+	public float LengthSquare(){
+		return  x * x + y * y + z * z;
+	}
+	
 	/* static method, return a new one */
 	public static Vector3D Normalize(Vector3D vec){
 		float length = vec.Length();

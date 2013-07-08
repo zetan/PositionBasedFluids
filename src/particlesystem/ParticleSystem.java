@@ -33,8 +33,11 @@ public class ParticleSystem {
 				for(int k = 2; k <= 6; k++){
 					particles.add(new Particle(new Vector3D(i, j, k), 1));
 				}
-					
 		
+		/*for(int i = 35; i <= 45; i+=2){
+			particles.add(new Particle(new Vector3D(i, 1, 3), 1));
+		}
+		*/
 		//particles.add(new Particle(new Vector3D(40, 1, 3), 1));
 		cellCube = new CellCube(box.getWidth(), box.getHeight(), box.getDepth());
 		
@@ -82,7 +85,11 @@ public class ParticleSystem {
 		cellCube.FitIntoCells(particles, box);
 	}
 	
-	
+	public void UpdateNeighbours(){
+		for(Particle particle : particles){
+			particle.setNeighbours(cellCube.getNeighbours(particle));
+		}
+	}
 
 	public List<Particle> getParticles() {
 		return particles;

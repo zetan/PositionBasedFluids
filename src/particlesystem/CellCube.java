@@ -1,5 +1,6 @@
 package particlesystem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.border.Border;
@@ -12,7 +13,13 @@ import com.sun.swing.internal.plaf.basic.resources.basic;
 
 public class CellCube {
 	Cell neighourhood[][][];
+	int width;
+	int height;
+	int depth;
 	public CellCube(int width, int height, int depth){
+		this.width = width;
+		this.height = height;
+		this.depth = depth;
 		neighourhood = new Cell[width][height][depth];
 		for(int i = 0; i < width; i++)
 			for(int j = 0; j < height; j++)
@@ -33,7 +40,17 @@ public class CellCube {
 				}
 	}
 	
+	private void Clear(){
+		for(int i = 0; i < width; i++)
+			for(int j = 0; j < height; j++)
+				for(int k = 0; k < depth; k++){
+					Cell cell = neighourhood[i][j][k];
+					cell.getParticles().clear();
+				}
+	}
+	
 	public void FitIntoCells(List<Particle> particles, Box box){
+		Clear();
 		for(Particle particle: particles){
 			try {
 				Vector3D pos = particle.getPosStar();
@@ -48,6 +65,18 @@ public class CellCube {
 				particle.setCell(cell);				
 			}
 		}
+	}
+	
+	public List<Particle> getNeighbours(Particle particle){
+		List<Particle> neighList = new ArrayList<Particle>();
+		List<Cell> neighbourCells = particle.getCell().getNeighbours();
+		for(Cell cell : neighbourCells){
+			if(cell.getParticles().size() > 0){
+				neighList.addAll(cell.getParticles());
+			}
+			
+		}
+		return neighList;
 	}
 	
 }
