@@ -30,8 +30,8 @@ public class ParticleSystem {
 		// TODO Auto-generated constructor stub
 		Random random = new Random();
 		for(int i = 30; i <= 50; i+=2)
-			for(int j = 5; j <= 40; j++)
-				for(int k = 2; k <= 6; k++){
+			for(int j = 5; j <= 60; j++)
+				for(int k = 1; k <= 7; k++){
 					particles.add(new Particle(new Vector3D(i+random.nextFloat()/10, j, k+random.nextFloat()/10), 1));
 				}
 		
@@ -59,7 +59,7 @@ public class ParticleSystem {
 	public void CollisionWithBox(){
 		for(Particle particle:particles){
 			if(box.isInBox(particle.getPosStar()) == false) {
-				box.ForceInsideBox(particle.getPosStar());
+				box.ForceInsideBox(particle.getPosStar(), particle.getVelocity());
 			}
 		}
 	}

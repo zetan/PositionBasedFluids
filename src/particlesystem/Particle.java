@@ -37,7 +37,7 @@ public class Particle {
 	public void Draw(GL gl, GLU glu, GLUT glut){
 		gl.glPushMatrix();
 		gl.glTranslatef(pos.x, pos.y, pos.z);
-		glut.glutSolidSphere(0.5, 8, 8);
+		glut.glutSolidSphere(0.5, 8, 4);
 	//	gl.glTranslatef(-pos.x, -pos.y, -pos.z);
 		gl.glPopMatrix();
 	}

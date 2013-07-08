@@ -59,7 +59,7 @@ public class CellCube {
 				particle.setCell(cell);
 			} catch (Exception e) {	//out of index
 				Vector3D posClone = particle.getPosStar().Clone();
-				box.ForceInsideBox(posClone);
+				box.ForceInsideBox(posClone, null);
 				Cell cell = neighourhood[(int)posClone.x][(int)posClone.y][(int)posClone.z];
 				cell.AddParticle(particle);
 				particle.setCell(cell);				
@@ -71,9 +71,9 @@ public class CellCube {
 		List<Particle> neighList = new ArrayList<Particle>();
 		List<Cell> neighbourCells = particle.getCell().getNeighbours();
 		for(Cell cell : neighbourCells){
-			if(cell.getParticles().size() > 0){
+		//	if(cell.getParticles().size() > 0){
 				neighList.addAll(cell.getParticles());
-			}
+		//	}
 			
 		}
 		return neighList;

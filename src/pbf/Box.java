@@ -35,14 +35,14 @@ public class Box {
 		return true;
 	}
 	
-	public void ForceInsideBox(Vector3D position){
-		float padding = 0.1f;
-		if(position.x < left) position.x = left + padding;
-		if(position.x > right) position.x = right - padding;
-		if(position.y < bottom) position.y = bottom + padding;
-		if(position.y > top) position.y = top - padding;
-		if(position.z < back) position.z = back + padding;
-		if(position.z > front) position.z = front - padding;
+	public void ForceInsideBox(Vector3D position, Vector3D velocity){
+		float padding = 0.01f;
+		if(position.x < left+padding) {position.x = left + padding; if(velocity != null && velocity.x < 0) velocity.x *= -0.5;}
+		if(position.x > right-padding){ position.x = right - padding;if(velocity != null && velocity.x > 0) velocity.x *= -0.5;}
+		if(position.y < bottom+padding) {position.y = bottom + padding;if(velocity != null && velocity.y < 0) velocity.y *= -0.5;}
+		if(position.y > top-padding){ position.y = top - padding;if(velocity != null && velocity.y > 0) velocity.y *= -0.5;}
+		if(position.z < back+padding){ position.z = back + padding;}
+		if(position.z > front-padding){ position.z = front - padding;}
 	}
 	
 	public void Draw(GL gl, GLU glu, GLUT glut){

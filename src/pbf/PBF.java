@@ -11,8 +11,8 @@ import util.Vector3D;
 
 public class PBF {
 	
-	public static final float H = 3;
-	public static final float KPOLY = (float) (315 / (64.0 * Math.PI * Math.pow(H, 9)));
+	public static final float H_H = 9;
+	public static final float KPOLY = (float) (315 / (64.0 * Math.PI * Math.pow(Math.sqrt(H_H), 9)));
 	public static final float REST_DENSITY = 0.26f;
 
 	public PBF(){}
@@ -22,19 +22,25 @@ public class PBF {
 		particleSystem.ApplyExternelForce();
 		ODESolver.EulerToStar(particleSystem.getParticles());
 		//find neighbours
+		long startTime=System.currentTimeMillis();
 		particleSystem.FitIntoCells();
 		particleSystem.UpdateNeighbours();
+		long neighbourEndTime=System.currentTimeMillis();
 		// make it align with constraints
-		for(int i = 0; i < 1; i++){
+		for(int i = 0; i < 3; i++){
+			long beginDeltaPos=System.currentTimeMillis();
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeC(particle);
 				ComputeLamda(particle);
 				ComputeDeltaPos(particle);
 			}
+			long endDeltaPos=System.currentTimeMillis();
 			particleSystem.CollisionWithBox();
+			long endCollision=System.currentTimeMillis();
 			for(Particle particle:particleSystem.getParticles()){
 				particle.getPosStar().Add(particle.getDeltaPos());
 			}
+			System.out.println("neighbour time = " + (neighbourEndTime - startTime) + "\t delta pos = " + (endDeltaPos - beginDeltaPos) + "\t collistion = " + (endCollision - endDeltaPos));
 		}
 		
 		//v = (posStar-pos) / t
@@ -58,7 +64,7 @@ public class PBF {
 		}
 		particle.setDensity(density);
 		particle.setConstraint(density / REST_DENSITY -1);
-		System.out.println("density = " + density);
+		//System.out.println("density = " + density);
 	}
 	
 	
@@ -84,15 +90,15 @@ public class PBF {
 	
 	public Vector3D KernelGradient(Vector3D pi, Vector3D pj){
 		Vector3D dist = Vector3D.Substract(pi, pj);
-		float r = dist.Length();
-		float a = (float) Math.pow(H*H - r*r, 2);
+		float r_r = dist.LengthSquare();
+		float a = (float) Math.pow(H_H - r_r, 2);
 		Vector3D vec = new Vector3D(- 2 * dist.x, - 2 * dist.y, - 2 * dist.z);
 		vec.Scale(KPOLY *3* a);
 		return vec;
 	}
 	public float Kernel(Vector3D pi, Vector3D pj){
-		float r = Vector3D.Substract(pi, pj).Length();
-		return (float) (KPOLY * Math.pow(H*H - r*r, 3));
+		float r_r = Vector3D.Substract(pi, pj).LengthSquare();
+		return (float) (KPOLY * Math.pow(H_H - r_r, 3));
 	}
 	
 	public void ComputeLamda(Particle particle){
@@ -102,7 +108,7 @@ public class PBF {
 			Vector3D grad = ComputeGrandientC(particle, neighbour);
 			sumGradient += grad.LengthSquare();
 		}
-		particle.setLamda(particle.getConstraint() / (sumGradient + 5f) * -1);
+		particle.setLamda(particle.getConstraint() / (sumGradient + 8f) * -1);
 	}
 	
 	public void ComputeDeltaPos(Particle particle){
