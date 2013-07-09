@@ -29,10 +29,10 @@ public class ParticleSystem {
 	public ParticleSystem() {
 		// TODO Auto-generated constructor stub
 		Random random = new Random();
-		for(int i = 30; i <= 50; i+=2)
-			for(int j = 5; j <= 60; j++)
-				for(int k = 1; k <= 7; k++){
-					particles.add(new Particle(new Vector3D(i+random.nextFloat()/10, j, k+random.nextFloat()/10), 1));
+		for(int i = 35; i <= 45; i+=1)
+			for(int j = 5; j <= 80; j++)
+				for(int k = 2; k <= 6; k++){
+					particles.add(new Particle(new Vector3D(i, j, k), 1));
 				}
 		
 		/*for(int i = 35; i <= 45; i+=2){

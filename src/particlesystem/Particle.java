@@ -37,15 +37,13 @@ public class Particle {
 	public void Draw(GL gl, GLU glu, GLUT glut){
 		gl.glPushMatrix();
 		gl.glTranslatef(pos.x, pos.y, pos.z);
-		glut.glutSolidSphere(0.5, 8, 4);
+		glut.glutSolidSphere(0.5, 4, 2);
 	//	gl.glTranslatef(-pos.x, -pos.y, -pos.z);
 		gl.glPopMatrix();
 	}
 	
 	
-	
-	
-	
+
 	public float getConstraint() {
 		return constraint;
 	}
