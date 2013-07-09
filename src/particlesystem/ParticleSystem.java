@@ -21,7 +21,8 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 public class ParticleSystem {
 	List<Particle> particles = new ArrayList<Particle>();
 	PBF pbf = new PBF();
-	Box box = new Box(0, 80, 0, 100, 0, 20);
+	Box box = new Box(0, 80, 0, 100, 0, 10);
+	Box stick = new Box(62, 67, 0, 30, 1, 5);
 	CellCube cellCube;
 	
 
@@ -29,23 +30,36 @@ public class ParticleSystem {
 	public ParticleSystem() {
 		// TODO Auto-generated constructor stub
 		Random random = new Random();
-		for(int i = 35; i <= 45; i+=1)
-			for(int j = 5; j <= 80; j++)
-				for(int k = 2; k <= 6; k++){
+		for(int i = 0; i <= 60; i+=1)
+			for(int j = 0; j < 15; j++)
+				for(int k = 0; k <= 5; k++){
 					particles.add(new Particle(new Vector3D(i, j, k), 1));
 				}
 		
-		/*for(int i = 35; i <= 45; i+=2){
-			particles.add(new Particle(new Vector3D(i, 1, 3), 1));
-		}
+	/*	for(int i = 20; i <= 30; i+=1)
+			for(int j = 30; j < 60; j++)
+				for(int k = 3; k <= 7; k++){
+					Particle particle = new Particle(new Vector3D(i, j, k), 1);
+					particle.setVelocity(new Vector3D(0, -10, 0));
+					particles.add(particle);
+				}
+	*/	
+	/*	for(int i = 20; i <= 30; i+=1)
+			for(int j = 80; j < 100; j++)
+				for(int k = 2; k <= 8; k++){
+					particles.add(new Particle(new Vector3D(i, j, k), 1));
+				}
 		*/
 		//particles.add(new Particle(new Vector3D(40, 1, 3), 1));
 		cellCube = new CellCube(box.getWidth(), box.getHeight(), box.getDepth());
+		//box = new Box(0, 60, 0, 100, 0, 10);
 		
 	}
 	
 	public void Update(){
 		pbf.UpdateFluid(this);
+		//box.UpdateLeftSide();
+		stick.Move();
 	}
 
 	public void ApplyExternelForce(){
@@ -60,6 +74,9 @@ public class ParticleSystem {
 		for(Particle particle:particles){
 			if(box.isInBox(particle.getPosStar()) == false) {
 				box.ForceInsideBox(particle.getPosStar(), particle.getVelocity());
+			}
+			if(stick.isInBox(particle.getPosStar()) == true){
+				stick.ForceOutsideBox(particle.getPosStar(), particle.getVelocity());
 			}
 		}
 	}
@@ -80,6 +97,7 @@ public class ParticleSystem {
 	    }
 	   // particles.get(0).Draw(gl, glu, glut);
 	    box.Draw(gl, glu, glut);
+	    stick.DrawSolid(gl, glu, glut);
 	}
 
 	public void FitIntoCells(){

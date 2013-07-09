@@ -28,7 +28,7 @@ public class PBF {
 		particleSystem.UpdateNeighbours();
 		long neighbourEndTime=System.currentTimeMillis();
 		// make it align with constraints
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < 3; i++){
 			long beginDeltaPos=System.currentTimeMillis();
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeC(particle);
@@ -120,7 +120,7 @@ public class PBF {
 			sumGradient += grad.LengthSquare();
 		}
 		//System.out.println("constraint = " + particle.getConstraint() + "\tsumgradient = " + sumGradient);
-		particle.setLamda(particle.getConstraint() / (sumGradient + 5f) * -1);
+		particle.setLamda(particle.getConstraint() / (sumGradient + 10f) * -1);
 	}
 	
 	public void ComputeDeltaPos(Particle particle){
