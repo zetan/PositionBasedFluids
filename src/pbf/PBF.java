@@ -33,9 +33,11 @@ public class PBF {
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeC(particle);
 			}
+			long endCtime=System.currentTimeMillis();
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeLamda(particle);
 			}
+			long endLamdaTime=System.currentTimeMillis();
 			for(Particle particle:particleSystem.getParticles()){
 				ComputeDeltaPos(particle);
 			}
@@ -45,7 +47,8 @@ public class PBF {
 			for(Particle particle:particleSystem.getParticles()){
 				particle.getPosStar().Add(particle.getDeltaPos());
 			}
-			System.out.println("neighbour time = " + (neighbourEndTime - startTime) + "\t delta pos = " + (endDeltaPos - beginDeltaPos) + "\t collistion = " + (endCollision - endDeltaPos));
+			System.out.println("neighbour time = " + (neighbourEndTime - startTime) + "\t delta pos = " + (endDeltaPos - beginDeltaPos) 
+					+ "\t collistion = " + (endCollision - endDeltaPos) + "\t C time = "  + (endCtime - beginDeltaPos) + "\tlandatime =" + (endLamdaTime - endCtime));
 		}
 		
 		//v = (posStar-pos) / t
@@ -129,7 +132,7 @@ public class PBF {
 		for(Particle neigh:neighbours){
 			if(neigh.equals(particle) == false){
 				Vector3D gradient = KernelGradient(particle.getPosStar(), neigh.getPosStar());
-				gradient.Scale(particle.getLamda() + neigh.getLamda()/* + ComputeArtiPressure(particle, neigh)*/);
+				gradient.Scale(particle.getLamda() + neigh.getLamda() + ComputeArtiPressure(particle, neigh));
 				delta.Add(gradient);
 			}
 			
